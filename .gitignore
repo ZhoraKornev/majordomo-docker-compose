@@ -1,3 +1,4 @@
 db-data
 config.env
 /app
+.env

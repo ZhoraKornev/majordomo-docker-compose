@@ -27,3 +27,16 @@ services:
     command:
       mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF
     restart: always
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: always
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+    user: '${MOSQUITTO_EXPOSE_PORT}:1000'
+    environment:
+      - MQTT_BROKER_URL=mqtt://mosquitto

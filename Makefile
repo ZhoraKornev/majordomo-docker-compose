@@ -53,7 +53,10 @@ init-db:
 	@$(call docker_compose, exec mysql mysqladmin -p$(MYSQL_ROOT_PASSWORD) drop $(MYSQL_DATABASE))
 	@$(call docker_compose, exec mysql mysqladmin -p$(MYSQL_ROOT_PASSWORD) create $(MYSQL_DATABASE))
 	@ cat ./app/db_terminal.sql | docker-compose exec -T mysql mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
-
+rebuild:
+	docker-compose up -d --force-recreate --build;
+mosquito-user:
+	docker exec -it mosquitto mosquitto_passwd -c  /mosquitto/config/passwd mosquitto_user
 %:
     @:
 define docker_compose
