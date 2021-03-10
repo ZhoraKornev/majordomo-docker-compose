@@ -1,12 +1,16 @@
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 #envs
-cnf ?= config.env
+cnf ?= .env
 include $(cnf)
+
 export $(shell sed 's/=.*//' $(cnf))
 
 #guid/uid
 export UID = $(shell id -u)
 export GID = $(shell id -g)
+
+bridge = ${DOCKER_BRIDGE}
+http_address = "http://$(bridge)"
 
 #vars
 APP_PATH=./app
@@ -55,6 +59,7 @@ init-db:
 	@ cat ./app/db_terminal.sql | docker-compose exec -T mysql mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
 rebuild:
 	docker-compose up -d --force-recreate --build;
+	echo $(http_address)
 mosquito-user:
 	docker exec -it mosquitto mosquitto_passwd -c  /mosquitto/config/passwd mosquitto_user
 %:
