@@ -56,10 +56,10 @@ init-db:
 	@ cat ./app/db_terminal.sql | docker-compose exec -T mysql mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
 rebuild:
 	docker-compose up -d --force-recreate --build;
-network-cretae:
+network-create:
 	docker network create majordomo
 mosquito-user:
-	docker exec -it mosquitto mosquitto_passwd -c  /mosquitto/config/passwd mosquitto_user
+	docker-compose exec mosquitto mosquitto_passwd -c  /mosquitto/config/passwd mosquitto_user
 %:
     @:
 define docker_compose

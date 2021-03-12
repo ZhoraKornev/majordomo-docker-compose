@@ -1,0 +1,17 @@
+# разрешаем подключаться новым девайсам (активируем режим сопряжения при запуске)
+permit_join: true
+
+# Настройки MQTT
+mqtt:
+  # MQTT базовый топик для публикации сообщений
+  base_topic: zigbee2mqtt
+  # MQTT URL
+  server: 'mqtt://mosquitto' #да именно так, т.к. мы хост указали в контейнере москита
+  # MQTT авторизация, если требуется
+  user: user
+  password: password
+
+# Настройки порта
+serial:
+  # Путь к стику CC2531
+  port: /dev/ttyACM0
