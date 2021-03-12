@@ -9,9 +9,6 @@ export $(shell sed 's/=.*//' $(cnf))
 export UID = $(shell id -u)
 export GID = $(shell id -g)
 
-bridge = ${DOCKER_BRIDGE}
-http_address = "http://$(bridge)"
-
 #vars
 APP_PATH=./app
 DB_DUMP_FILE=./app/db_terminal.sql
@@ -59,7 +56,8 @@ init-db:
 	@ cat ./app/db_terminal.sql | docker-compose exec -T mysql mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)
 rebuild:
 	docker-compose up -d --force-recreate --build;
-	echo $(http_address)
+network-cretae:
+	docker network create majordomo
 mosquito-user:
 	docker exec -it mosquitto mosquitto_passwd -c  /mosquitto/config/passwd mosquitto_user
 %:

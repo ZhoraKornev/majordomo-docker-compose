@@ -3,9 +3,10 @@ services:
 
   majordomo:
     build: ./app-conf/debian/
+    container_name: majordomo_${PROJECT_NAME}_majordomo
     ports:
-      - ${DOCKER_BRIDGE}:80:80
-      - ${DOCKER_BRIDGE}:8001:8001
+      - ${MAJORDOMO_NGINX_PORT}:80
+      - ${MAJORDOMO_UI_PORT}:8001
     networks:
       majordomo:
     volumes:
@@ -20,7 +21,7 @@ services:
     networks:
       majordomo:
     ports:
-      - ${DOCKER_BRIDGE}:3306:3306
+      - ${MYSQL_EXPOSE_PORT}:3306
     volumes:
       - ./db-data:/var/lib/mysql
     environment:
@@ -44,14 +45,14 @@ services:
     networks:
       majordomo:
     ports:
-      - ${DOCKER_BRIDGE}:1883:1883
+      - ${MOSQUITTO_EXPOSE_PORT}:1883
     user: '1000:1000'
     environment:
       - MQTT_BROKER_URL=mqtt://mosquitto
 
 
   zigbee2mqtt:
-    container_name: zigbee2mqtt
+    container_name: majordomo_${PROJECT_NAME}_zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest # x86_64/amd64
     restart: always
     volumes:
@@ -65,14 +66,14 @@ services:
       - mosquitto
 
   blynk-server:
-    container_name: blynk-server
+    container_name: majordomo_${PROJECT_NAME}_blynk-server
     image: mpherg/blynk-server:latest
     networks:
       majordomo:
     ports:
-      - '${DOCKER_BRIDGE}:8080:8080'
-      - '${DOCKER_BRIDGE}:8440:8440'
-      - '${DOCKER_BRIDGE}:9443:9443'
+      - '${BLYNK_UI_PORT}:8080'
+      - '${BLYNK_EXPOSE_PORT}:8440'
+      - '${BLYNK_CONNECT_PORT}:9443'
     restart: always
     volumes:
       - ./blynk/data:/config
@@ -80,7 +81,5 @@ services:
 
 networks:
   majordomo:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: ${DOCKER_NETWORK}
+    external:
+      true
