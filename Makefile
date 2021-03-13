@@ -48,9 +48,9 @@ exec-app: ## Enter to app container
 	@$(call docker_compose, exec majordomo bash)
 
 app-owner-user: ## Set file owner to current user for app
-	@ docker-compose exec -T majordomo chown www-data:www-data -R /var/www/html && chmod -R 777 /var/www/html
+	@ docker-compose exec majordomo chown www-data:www-data -R /var/www/html && chmod -R 777 /var/www/html
 init-db:
-	@ sleep 10s
+	@ sleep 2s
 	@$(call docker_compose, exec mysql mysqladmin -p$(MYSQL_ROOT_PASSWORD) drop $(MYSQL_DATABASE))
 	@$(call docker_compose, exec mysql mysqladmin -p$(MYSQL_ROOT_PASSWORD) create $(MYSQL_DATABASE))
 	@ cat ./app/db_terminal.sql | docker-compose exec -T mysql mysql -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)

@@ -54,7 +54,7 @@ services:
   zigbee2mqtt:
     container_name: majordomo_${PROJECT_NAME}_zigbee2mqtt
     image: koenkk/zigbee2mqtt:latest # x86_64/amd64
-    restart: always
+    restart: "no"
     volumes:
       - ./zigbee2mqtt:/app/data
     devices:
@@ -74,7 +74,7 @@ services:
       - '${BLYNK_UI_PORT}:8080'
       - '${BLYNK_EXPOSE_PORT}:8440'
       - '${BLYNK_CONNECT_PORT}:9443'
-    restart: always
+    restart: "no"
     volumes:
       - ./blynk/data:/config
       - ./blynk/backup:/data/
