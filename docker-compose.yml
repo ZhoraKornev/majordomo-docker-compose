@@ -34,51 +34,6 @@ services:
       mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF
     restart: always
 
-  mosquitto:
-    container_name: majordomo_${PROJECT_NAME}_mosquitto
-    image: eclipse-mosquitto:latest
-    restart: always
-    volumes:
-      - ./mosquitto/config:/mosquitto/config
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-    networks:
-      majordomo:
-    ports:
-      - ${MOSQUITTO_EXPOSE_PORT}:1883
-    user: '1000:1000'
-    environment:
-      - MQTT_BROKER_URL=mqtt://mosquitto
-
-
-  zigbee2mqtt:
-    container_name: majordomo_${PROJECT_NAME}_zigbee2mqtt
-    image: koenkk/zigbee2mqtt:latest # x86_64/amd64
-    restart: "no"
-    volumes:
-      - ./zigbee2mqtt:/app/data
-    devices:
-      - /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B001938AB48-if00:/dev/ttyACM0
-    user: '1000:20'
-    networks:
-      - majordomo
-    depends_on:
-      - mosquitto
-
-  blynk-server:
-    container_name: majordomo_${PROJECT_NAME}_blynk-server
-    image: mpherg/blynk-server:latest
-    networks:
-      majordomo:
-    ports:
-      - '${BLYNK_UI_PORT}:8080'
-      - '${BLYNK_EXPOSE_PORT}:8440'
-      - '${BLYNK_CONNECT_PORT}:9443'
-    restart: "no"
-    volumes:
-      - ./blynk/data:/config
-      - ./blynk/backup:/data/
-
 networks:
   majordomo:
     external:
