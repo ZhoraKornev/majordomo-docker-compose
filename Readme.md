@@ -42,8 +42,21 @@ MacOs и Raspberry в ближайшем будущем будут протес�
 `chown -R www-data:www-data /var/www`
 `chmod -R 777 /var/www`
 
+####problem whe init DB
+- `cp app/db_terminal.sql db-data/db.sql`
+- `docker-compose exec mysql bash`
+- `mysqladmin -p drop majordomo`
+            Enter password:
+            Do you really want to drop the 'majordomo' database [y/N] y
+            Database "majordomo" dropped
+- `mysqladmin -p create majordomo`
+        Enter password:
+- `mysql -u root -p majordomo < var/lib/mysql/db.sql`
+Enter password:
+
 # Отзывы
 Всем отзывам буду рад в Issue.
+[link](https://github.com/A-SOM/docker-majordomo)
 
 #TODO
 - English version.
