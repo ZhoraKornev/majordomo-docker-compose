@@ -51,20 +51,6 @@ services:
     environment:
       - MQTT_BROKER_URL=mqtt://mosquitto
 
-  blynk-server:
-    container_name: majordomo_${PROJECT_NAME}_blynk-server
-    image: mpherg/blynk-server:latest
-    networks:
-      majordomo:
-    ports:
-      - '${BLYNK_UI_PORT}:8080'
-      - '${BLYNK_EXPOSE_PORT}:8440'
-      - '${BLYNK_CONNECT_PORT}:9443'
-    restart: "no"
-    volumes:
-      - ./blynk/data:/config
-      - ./blynk/backup:/data/
-
 networks:
   majordomo:
     external:
